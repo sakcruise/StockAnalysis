@@ -18,10 +18,9 @@ class GetStockdata():
 
     def get_stock_list(self):
         # stocklist_df = pd.read_csv(sys.path[1] + "\data\input\stock500list.csv")
-        stocklist_df = pd.read_sql("select symbol as symbol from stocks where lower(symbol) = {0}".format(), con=self.conn)
+        stocklist_df = pd.read_sql("select symbol from stocks".format(), con=self.conn)
         print(stocklist_df)
         stocklist =  stocklist_df['symbol'].tolist()
-        print(stocklist)
         return stocklist
 
     def download_stock_data(self, _stocklist):
@@ -33,12 +32,11 @@ class GetStockdata():
             panel_data.reset_index(inplace=True)
             # panel_data.to_csv(self.output_path + symbol.lower() + "_" + self.start_date.replace('-','') + "_" + self.end_date.replace('-','') + ".csv")
             panel_data['symbol'] = symbol.lower()
-            print(panel_data)
             cols = ['symbol','Date', 'High', 'Low', 'Open', 'Close', 'Volume', 'Adj Close']
             panel_data_ordered = panel_data[cols]
             panel_data_ordered.columns = map(str.lower, panel_data_ordered.columns)
             panel_data_ordered_renamed = panel_data_ordered.rename(columns={'adj close': 'close_adj'})
-            print(panel_data_ordered_renamed)
+            print(symbol)
             panel_data_ordered_renamed.to_sql(name="stocks_price", con=self.conn, index=False, if_exists='append')
 
 def main():
