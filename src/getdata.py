@@ -27,9 +27,9 @@ class GetStockdata():
         if not os.path.exists(self.output_path):
             os.makedirs(self.output_path)
         for symbol in _stocklist:
-            print(symbol)
             panel_data = data.DataReader(symbol+'.NS', 'yahoo', self.start_date, self.end_date)
             panel_data.reset_index(inplace=True)
+
             # panel_data.to_csv(self.output_path + symbol.lower() + "_" + self.start_date.replace('-','') + "_" + self.end_date.replace('-','') + ".csv")
             panel_data['symbol'] = symbol.lower()
             cols = ['symbol','Date', 'High', 'Low', 'Open', 'Close', 'Volume', 'Adj Close']
