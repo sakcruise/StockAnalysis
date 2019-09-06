@@ -26,7 +26,9 @@ class GetStockdata():
     def download_stock_data(self, _stocklist):
         if not os.path.exists(self.output_path):
             os.makedirs(self.output_path)
+        i = 0
         for symbol in _stocklist:
+            i += 1
             panel_data = data.DataReader(symbol+'.NS', 'yahoo', self.start_date, self.end_date)
             panel_data.reset_index(inplace=True)
 
@@ -36,7 +38,7 @@ class GetStockdata():
             panel_data_ordered = panel_data[cols]
             panel_data_ordered.columns = map(str.lower, panel_data_ordered.columns)
             panel_data_ordered_renamed = panel_data_ordered.rename(columns={'adj close': 'close_adj'})
-            print(symbol)
+            print(str(i)+ " . " + symbol)
             panel_data_ordered_renamed.to_sql(name="stocks_price", con=self.conn, index=False, if_exists='append')
 
 def main():
