@@ -34,9 +34,9 @@ class GetStockdata():
                     from
                     (select s.symbol, s.date,s.open, s.high, s.low,
                     max(high)
-                    over (partition by s.symbol order by s.date ROWS BETWEEN 250 PRECEDING AND CURRENT ROW) as hhv,
+                    over (partition by s.symbol order by s.date ROWS BETWEEN 250 PRECEDING AND 1 PRECEDING) as hhv,
                     min(low)
-                    over (partition by s.symbol order by s.date ROWS BETWEEN 50 PRECEDING AND CURRENT ROW) as llv,
+                    over (partition by s.symbol order by s.date ROWS BETWEEN 50 PRECEDING AND 1 PRECEDING) as llv,
                     row_number() over (partition by s.symbol order by s.date) as rownum
                     from stocks_price s
                     where s.symbol = 'abb'
@@ -62,12 +62,12 @@ class GetStockdata():
                 stocks_df.at[i, 'sell_date'] = row['date']
                 stocks_df.at[i, 'sell_rate'] = row['rate']
                 i+=1
-        stocks_df['profit'] = stocks_df['buy_rate'] - stocks_df['sell_rate']
+        stocks_df['profit'] = stocks_df['sell_rate'] - stocks_df['buy_rate']
 
         print(stocks_df.to_csv(self.output_path + symbol + '_' + 'profit' + '.csv', index=False))
         print(stocks_df['profit'].sum())
         # plt.scatter(date, [600.01, 112.78], marker='o')
-        #
+
         # stockprice_df.plot(x='date', y='abb')
         # # ax.scatter(xlist, ylist, zlist, color=color)
         # # plt.plot(0, 0+1)

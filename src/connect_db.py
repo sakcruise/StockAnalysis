@@ -3,7 +3,7 @@ import sqlalchemy
 import sys
 sys.path.append("..")
 
-from src import config as conf
+# from src import config as conf
 
 def connect_db():
     # conn_str = "host={} dbname={} user={} password={}".format(conf.db['host'], conf.db['database'], conf.db['username'], conf.db['password'])
